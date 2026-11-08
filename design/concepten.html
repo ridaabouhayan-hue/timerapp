@@ -1,0 +1,292 @@
+<title>Tijdvak Concepten</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: rustige werkpagina. Korte kop, dan 4 werkende vensters onder elkaar in een 2-koloms raster, elk met een korte toelichting. */
+:root{
+  --page:#e9ecf1; --page-ink:#141821; --page-muted:#5c6577; --page-line:#d3d8e1;
+  --w-bg:#f7f8fa; --w-surface:#ffffff; --w-ink:#121620; --w-muted:#6a7282; --w-line:#e2e5eb; --w-track:#e7eaf0;
+  --w-accent:#2563eb; --w-accent-ink:#ffffff; --w-warn:#d97706; --w-over:#dc2626;
+  --sans:"Segoe UI Variable Display","Geist","Segoe UI",system-ui,sans-serif;
+  --num:"Geist","Segoe UI Variable Display","Segoe UI",system-ui,sans-serif;
+  --mono:"Geist Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --page:#0d1015; --page-ink:#e7eaf0; --page-muted:#929aab; --page-line:#252b36;
+  --w-bg:#1b1f27; --w-surface:#232833; --w-ink:#eef1f6; --w-muted:#98a0b0; --w-line:#2f3542; --w-track:#2c323e;
+  --w-accent:#5b8cff; --w-accent-ink:#0b1020; --w-warn:#f0a43a; --w-over:#f26464; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --page:#0d1015; --page-ink:#e7eaf0; --page-muted:#929aab; --page-line:#252b36;
+  --w-bg:#1b1f27; --w-surface:#232833; --w-ink:#eef1f6; --w-muted:#98a0b0; --w-line:#2f3542; --w-track:#2c323e;
+  --w-accent:#5b8cff; --w-accent-ink:#0b1020; --w-warn:#f0a43a; --w-over:#f26464; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--page);color:var(--page-ink);font:15px/1.55 var(--sans);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:36px 64px}
+.wrap{max-width:1180px;margin:0 auto;display:grid;gap:40px}
+header{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap}
+header .t{display:grid;gap:10px;max-width:64ch}
+h1{margin:0;font:600 clamp(28px,4vw,40px)/1.1 var(--sans);letter-spacing:-.02em;text-wrap:balance}
+h2{margin:0;font:600 19px/1.2 var(--sans)}
+p{margin:0}
+.muted{color:var(--page-muted)}
+.eyebrow{font:500 12px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--page-muted)}
+.theme{display:inline-flex;border:1px solid var(--page-line);border-radius:8px;overflow:hidden}
+.theme button{font:500 13px var(--sans);background:transparent;color:var(--page-muted);border:0;padding:7px 14px;cursor:pointer}
+.theme button[aria-pressed="true"]{background:var(--page-ink);color:var(--page)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:36px 28px}
+.concept{display:grid;gap:14px;min-width:0}
+.cap{display:grid;gap:4px}
+.cap .row{display:flex;gap:10px;align-items:baseline}
+.cap .id{font:500 12px var(--mono);color:var(--page-muted)}
+.cap p{font-size:14px;color:var(--page-muted);max-width:60ch}
+.hint{font-size:13px;color:var(--page-muted)}
+kbd{font:500 11px var(--mono);border:1px solid var(--page-line);border-bottom-width:2px;border-radius:4px;padding:1px 5px;color:var(--page-ink)}
+
+/* Windows-venster */
+.win{background:var(--w-bg);color:var(--w-ink);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;aspect-ratio:16/10.5;max-width:100%;box-shadow:0 1px 2px rgba(0,0,0,.08),0 20px 50px -12px rgba(15,23,42,.28),0 0 0 1px var(--w-line);container-type:inline-size;position:relative;user-select:none}
+.tb{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;padding-left:12px;font:400 12px var(--sans);color:var(--w-muted)}
+.tb .ttl{display:flex;gap:8px;align-items:center}
+.tb svg{width:14px;height:14px}
+.ctl{display:flex;height:100%}
+.ctl i{width:44px;height:100%;position:relative;display:block}
+.ctl i::before,.ctl i::after{content:"";position:absolute;left:50%;top:50%}
+.ctl .mn::before{width:10px;height:1px;background:currentColor;transform:translate(-50%,-50%)}
+.ctl .mx::before{width:9px;height:9px;border:1px solid currentColor;border-radius:2px;transform:translate(-50%,-50%)}
+.ctl .cl::before,.ctl .cl::after{width:12px;height:1px;background:currentColor}
+.ctl .cl::before{transform:translate(-50%,-50%) rotate(45deg)}
+.ctl .cl::after{transform:translate(-50%,-50%) rotate(-45deg)}
+.body{flex:1;min-height:0;position:relative;display:flex}
+.digits{font-family:var(--num);font-variant-numeric:tabular-nums;letter-spacing:-.04em;line-height:1;cursor:ns-resize;transition:color .3s}
+.win[data-phase="warn"] .digits{color:var(--w-warn)}
+.win[data-phase="over"] .digits{color:var(--w-over)}
+.btn{font:500 13px var(--sans);color:var(--w-ink);background:var(--w-surface);border:1px solid var(--w-line);border-radius:6px;padding:0 14px;height:32px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:background .15s,border-color .15s}
+.btn:hover{border-color:color-mix(in srgb,var(--w-ink) 22%,var(--w-line))}
+.btn.primary{background:var(--w-accent);color:var(--w-accent-ink);border-color:var(--w-accent);min-width:96px}
+.btn.primary:hover{background:color-mix(in srgb,var(--w-accent) 88%,#000)}
+.btn:focus-visible,.chip:focus-visible,.seg button:focus-visible,.side button:focus-visible{outline:2px solid var(--w-accent);outline-offset:2px}
+.btn svg{width:14px;height:14px}
+.chip{font:500 12px var(--sans);color:var(--w-ink);background:transparent;border:1px solid var(--w-line);border-radius:999px;height:28px;padding:0 12px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--w-ink);color:var(--w-bg);border-color:var(--w-ink)}
+.status{font:400 12px var(--sans);color:var(--w-muted);font-variant-numeric:tabular-nums}
+
+/* A Mica */
+.a .body{flex-direction:column;align-items:center;justify-content:center;gap:5cqw;padding:0 6cqw 3cqw}
+.a .digits{font-size:22cqw;font-weight:500}
+.a .chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.a .ctrls{display:flex;gap:8px}
+.a .line{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--w-track)}
+.a .line i{display:block;height:100%;width:0;background:var(--w-accent);transition:background .3s}
+.win[data-phase="warn"] .line i{background:var(--w-warn)}
+.win[data-phase="over"] .line i{background:var(--w-over)}
+
+/* B Ring */
+.b .body{flex-direction:column;align-items:center;justify-content:center;gap:2.6cqw}
+.b .ring{position:relative;width:35cqw;aspect-ratio:1}
+.b .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.b .ring circle{fill:none;stroke-width:3}
+.b .ring .trk{stroke:var(--w-track)}
+.b .ring .val{stroke:var(--w-accent);stroke-linecap:round;transition:stroke .3s}
+.win[data-phase="warn"] .ring .val{stroke:var(--w-warn)}
+.win[data-phase="over"] .ring .val{stroke:var(--w-over)}
+.b .ring .in{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:6px}
+.b .digits{font-size:8.6cqw;font-weight:400}
+.b .ctrls{display:flex;gap:14px;align-items:center}
+.b .round{width:40px;height:40px;border-radius:50%;padding:0}
+.b .round.primary{width:52px;height:52px;min-width:0}
+.b .round.primary svg{width:18px;height:18px}
+.b .mini{display:flex;gap:2px}
+.b .mini button{font:500 12px var(--sans);background:none;border:0;color:var(--w-muted);padding:4px 8px;border-radius:5px;cursor:pointer}
+.b .mini button[aria-pressed="true"]{color:var(--w-accent);background:color-mix(in srgb,var(--w-accent) 12%,transparent)}
+
+/* C Lineair */
+.c .body{flex-direction:column;justify-content:center;gap:3.2cqw;padding:0 7cqw}
+.c .top{display:flex;justify-content:space-between;align-items:baseline}
+.c .label{font:500 13px var(--sans)}
+.c .digits{font-size:24cqw;font-weight:300;margin-left:-.06em}
+.c .bar{position:relative;height:4px;border-radius:2px;background:var(--w-track)}
+.c .bar i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:2px;background:var(--w-accent);transition:background .3s}
+.win[data-phase="warn"] .bar i{background:var(--w-warn)}
+.win[data-phase="over"] .bar i{background:var(--w-over)}
+.c .bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.c .seg{display:inline-flex;background:var(--w-track);border-radius:7px;padding:2px}
+.c .seg button{font:500 12px var(--sans);border:0;background:transparent;color:var(--w-muted);height:28px;padding:0 11px;border-radius:5px;cursor:pointer}
+.c .seg button[aria-pressed="true"]{background:var(--w-surface);color:var(--w-ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.c .acts{display:flex;gap:8px}
+
+/* D Paneel */
+.d .body{display:grid;grid-template-columns:30% 1fr}
+.d .side{border-right:1px solid var(--w-line);padding:2cqw 1.6cqw;display:grid;align-content:start;gap:2px;overflow:hidden}
+.d .side h3{margin:6px 8px 6px;font:500 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--w-muted)}
+.d .side button{display:flex;justify-content:space-between;gap:8px;font:400 13px var(--sans);text-align:left;background:none;border:0;color:var(--w-ink);padding:6px 8px;border-radius:5px;cursor:pointer;position:relative}
+.d .side button span:last-child{color:var(--w-muted);font-variant-numeric:tabular-nums}
+.d .side button:hover{background:color-mix(in srgb,var(--w-ink) 5%,transparent)}
+.d .side button[aria-pressed="true"]{background:color-mix(in srgb,var(--w-ink) 7%,transparent)}
+.d .side button[aria-pressed="true"]::before{content:"";position:absolute;left:0;top:25%;bottom:25%;width:3px;border-radius:2px;background:var(--w-accent)}
+.d .main{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3cqw;padding:3cqw}
+.d .name{font:500 14px var(--sans)}
+.d .digits{font-size:15cqw;font-weight:500}
+.d .ctrls{display:flex;gap:8px}
+.d .prog{width:70%;height:3px;border-radius:2px;background:var(--w-track);overflow:hidden}
+.d .prog i{display:block;height:100%;width:0;background:var(--w-accent);transition:background .3s}
+.win[data-phase="warn"] .prog i{background:var(--w-warn)}
+.win[data-phase="over"] .prog i{background:var(--w-over)}
+
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;border-top:1px solid var(--page-line);padding-top:24px}
+.notes div{display:grid;gap:4px}
+.notes p{font-size:14px;color:var(--page-muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="t">
+      <span class="eyebrow">Tijdvak · professionele concepten</span>
+      <h1>Vier strakke varianten van de basistimer</h1>
+      <p class="muted">Alle vier werken echt. Klik een tijd, druk op Start, scrol op de cijfers om minuten aan te passen. Spatie start of pauzeert het venster dat je het laatst hebt aangeraakt. Bekijk ze ook in donker.</p>
+    </div>
+    <div class="theme" role="group" aria-label="Thema">
+      <button id="th-sys" aria-pressed="true">Systeem</button><button id="th-light" aria-pressed="false">Licht</button><button id="th-dark" aria-pressed="false">Donker</button>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- A -->
+    <section class="concept">
+      <div class="win a" data-timer data-min="5">
+        <div class="tb"><span class="ttl">Tijdvak</span><span class="ctl"><i class="mn"></i><i class="mx"></i><i class="cl"></i></span></div>
+        <div class="body">
+          <div class="digits" data-r="digits">05:00</div>
+          <div class="chips">
+            <button class="chip" data-preset="1">1</button><button class="chip" data-preset="3">3</button><button class="chip" data-preset="5" aria-pressed="true">5</button><button class="chip" data-preset="10">10</button><button class="chip" data-preset="15">15</button><button class="chip" data-preset="20">20</button><button class="chip" data-preset="30">30</button>
+          </div>
+          <div class="ctrls">
+            <button class="btn" data-act="minus">-1</button>
+            <button class="btn primary" data-act="toggle" data-r="toggle">Start</button>
+            <button class="btn" data-act="reset">Reset</button>
+            <button class="btn" data-act="plus">+1</button>
+          </div>
+          <div class="line"><i data-r="fill"></i></div>
+        </div>
+      </div>
+      <div class="cap"><div class="row"><span class="id">A</span><h2>Mica</h2></div><p>Het eerste ontwerp, verfijnd. Alles in één oogopslag: grote cijfers, tijden in één klik, bediening eronder. Een dunne lijn onderin toont de voortgang.</p></div>
+    </section>
+
+    <!-- B -->
+    <section class="concept">
+      <div class="win b" data-timer data-min="10">
+        <div class="tb"><span class="ttl">Tijdvak</span><span class="ctl"><i class="mn"></i><i class="mx"></i><i class="cl"></i></span></div>
+        <div class="body">
+          <div class="ring">
+            <svg viewBox="0 0 100 100"><circle class="trk" cx="50" cy="50" r="46"/><circle class="val" data-r="ring" cx="50" cy="50" r="46" stroke-dasharray="289.03" stroke-dashoffset="0"/></svg>
+            <div class="in"><div class="digits" data-r="digits">10:00</div><div class="status" data-r="status">Klaar om te starten</div></div>
+          </div>
+          <div class="ctrls">
+            <button class="btn round" data-act="reset" aria-label="Reset"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 8a5 5 0 1 0 1.5-3.5"/><path d="M3 2.5V5h2.5"/></svg></button>
+            <button class="btn round primary" data-act="toggle" data-r="toggle" aria-label="Start"></button>
+            <button class="btn round" data-act="plus" aria-label="Plus 1 minuut">+1</button>
+          </div>
+          <div class="mini"><button data-preset="1">1m</button><button data-preset="5">5m</button><button data-preset="10" aria-pressed="true">10m</button><button data-preset="15">15m</button><button data-preset="25">25m</button><button data-preset="45">45m</button></div>
+        </div>
+      </div>
+      <div class="cap"><div class="row"><span class="id">B</span><h2>Ring</h2></div><p>Een dunne voortgangsring rond de tijd, met daaronder wanneer de timer afloopt. Ronde knoppen zoals bij een mediaspeler. Rustig en elegant.</p></div>
+    </section>
+
+    <!-- C -->
+    <section class="concept">
+      <div class="win c" data-timer data-min="15">
+        <div class="tb"><span class="ttl">Tijdvak</span><span class="ctl"><i class="mn"></i><i class="mx"></i><i class="cl"></i></span></div>
+        <div class="body">
+          <div class="top"><span class="label">Timer</span><span class="status" data-r="status">Klaar om te starten</span></div>
+          <div class="digits" data-r="digits">15:00</div>
+          <div class="bar"><i data-r="fill"></i></div>
+          <div class="bottom">
+            <div class="seg"><button data-preset="5">5</button><button data-preset="10">10</button><button data-preset="15" aria-pressed="true">15</button><button data-preset="30">30</button><button data-preset="45">45</button><button data-preset="60">60</button></div>
+            <div class="acts"><button class="btn" data-act="reset">Reset</button><button class="btn primary" data-act="toggle" data-r="toggle">Start</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="cap"><div class="row"><span class="id">C</span><h2>Lineair</h2></div><p>Grote, lichte cijfers links uitgelijnd, een strakke voortgangsbalk en een gesegmenteerde keuze voor de tijd. Het meest minimalistisch.</p></div>
+    </section>
+
+    <!-- D -->
+    <section class="concept">
+      <div class="win d" data-timer data-min="10" data-name="Uitleg">
+        <div class="tb"><span class="ttl">Tijdvak</span><span class="ctl"><i class="mn"></i><i class="mx"></i><i class="cl"></i></span></div>
+        <div class="body">
+          <div class="side">
+            <h3>Snel</h3>
+            <button data-preset="1" data-name="1 minuut"><span>1 minuut</span><span>1:00</span></button>
+            <button data-preset="5" data-name="5 minuten"><span>5 minuten</span><span>5:00</span></button>
+            <h3>Mijn tijden</h3>
+            <button data-preset="10" data-name="Uitleg" aria-pressed="true"><span>Uitleg</span><span>10:00</span></button>
+            <button data-preset="15" data-name="Pauze"><span>Pauze</span><span>15:00</span></button>
+            <button data-preset="20" data-name="Groepswerk"><span>Groepswerk</span><span>20:00</span></button>
+            <button data-preset="45" data-name="Toets"><span>Toets</span><span>45:00</span></button>
+          </div>
+          <div class="main">
+            <div class="name" data-r="name">Uitleg</div>
+            <div class="digits" data-r="digits">10:00</div>
+            <div class="prog"><i data-r="fill"></i></div>
+            <div class="status" data-r="status">Klaar om te starten</div>
+            <div class="ctrls"><button class="btn" data-act="minus">-1</button><button class="btn primary" data-act="toggle" data-r="toggle">Start</button><button class="btn" data-act="reset">Reset</button><button class="btn" data-act="plus">+1</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="cap"><div class="row"><span class="id">D</span><h2>Paneel</h2></div><p>Zoals de Instellingen-app van Windows: links je eigen tijden met naam (Uitleg, Pauze, Toets), rechts de timer. Handig als je vaste tijden hebt.</p></div>
+    </section>
+  </div>
+
+  <div class="notes">
+    <div><h2>Wat ze delen</h2><p>Windows 11-uiterlijk, licht en donker volgen het systeem, cijfers die niet verspringen, en een rustig kleurverloop: blauw, in de laatste minuut oranje, na nul rood met doortellen.</p></div>
+    <div><h2>Bediening</h2><p><kbd>Spatie</kbd> start en pauzeert, <kbd>R</kbd> reset, <kbd>+</kbd> en <kbd>-</kbd> passen een minuut aan, scrollen op de cijfers ook. Fullscreen en mini volgen hierna.</p></div>
+    <div><h2>Kies er een</h2><p>Laat weten welke het wordt, of combineer: bijvoorbeeld de ring van B met de zijbalk van D. De app in de repository is nu gebouwd op A.</p></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const root=document.documentElement;
+  const tb={sys:document.getElementById('th-sys'),light:document.getElementById('th-light'),dark:document.getElementById('th-dark')};
+  function setTheme(t){ if(t==='sys') root.removeAttribute('data-theme'); else root.setAttribute('data-theme',t);
+    Object.entries(tb).forEach(([k,b])=>b.setAttribute('aria-pressed',String(k===t))); try{localStorage.setItem('tv-theme',t)}catch(e){} }
+  Object.entries(tb).forEach(([k,b])=>b.addEventListener('click',()=>setTheme(k)));
+  try{const s=localStorage.getItem('tv-theme'); if(s) setTheme(s);}catch(e){}
+
+  const PLAY='<svg viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.2v9.6c0 .5.5.8.9.5l7.2-4.8a.6.6 0 0 0 0-1L5.9 2.7c-.4-.3-.9 0-.9.5z"/></svg>';
+  const PAUSE='<svg viewBox="0 0 16 16" fill="currentColor"><rect x="4" y="3" width="3" height="10" rx="1"/><rect x="9" y="3" width="3" height="10" rx="1"/></svg>';
+  const fmt=ms=>{const neg=ms<0; let s=Math.ceil(Math.abs(ms)/1000); if(neg) s=Math.floor(Math.abs(ms)/1000);
+    const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60, p=n=>String(n).padStart(2,'0');
+    return (neg?'+':'')+(h?h+':'+p(m):p(m))+':'+p(x)};
+  const clock=d=>d.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
+  let last=null;
+  const timers=[...document.querySelectorAll('[data-timer]')].map(el=>{
+    const q=r=>el.querySelector(`[data-r="${r}"]`);
+    const t={el,total:+el.dataset.min*60000,remain:+el.dataset.min*60000,endAt:0,running:false};
+    const round=el.classList.contains('b');
+    t.left=()=>t.running?t.endAt-Date.now():t.remain;
+    t.render=()=>{const l=t.left(); q('digits').textContent=fmt(l);
+      el.dataset.phase=l<=0?'over':(l<=60000&&t.running||l<=60000&&l<t.total)?'warn':'';
+      const frac=Math.max(0,Math.min(1,l/t.total));
+      if(q('fill')) q('fill').style.width=((1-frac)*100)+'%';
+      if(q('ring')) q('ring').setAttribute('stroke-dashoffset',String(289.03*(1-frac)));
+      const st=q('status'); if(st) st.textContent=l<=0?'Tijd is om':t.running?'Eindigt om '+clock(new Date(t.endAt)):(l<t.total?'Gepauzeerd':'Klaar om te starten');
+      const tg=q('toggle'); const lbl=t.running?'Pauze':(l<t.total&&l>0?'Verder':'Start');
+      if(round){tg.innerHTML=t.running?PAUSE:PLAY; tg.setAttribute('aria-label',lbl)} else tg.textContent=lbl;};
+    t.toggle=()=>{ if(t.running){t.remain=t.endAt-Date.now();t.running=false} else { if(t.remain<=0) t.remain=t.total; t.endAt=Date.now()+t.remain;t.running=true} t.render()};
+    t.reset=()=>{t.running=false;t.remain=t.total;t.render()};
+    t.add=ms=>{ if(t.running) t.endAt+=ms; else t.remain=Math.max(0,t.remain+ms); if(!t.running) {t.total=Math.max(60000,t.total+ms); t.remain=Math.min(t.remain,t.total)} else t.total=Math.max(t.total,t.left()); t.render()};
+    t.set=(min,name)=>{t.running=false;t.total=t.remain=min*60000; if(name&&q('name')) q('name').textContent=name;
+      el.querySelectorAll('[data-preset]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.preset===min&&(!name||b.dataset.name===name)))); t.render()};
+    el.addEventListener('pointerdown',()=>last=t);
+    el.addEventListener('click',e=>{const b=e.target.closest('button'); if(!b) return;
+      if(b.dataset.preset) t.set(+b.dataset.preset,b.dataset.name);
+      const a=b.dataset.act; if(a==='toggle') t.toggle(); if(a==='reset') t.reset(); if(a==='plus') t.add(60000); if(a==='minus') t.add(-60000);});
+    q('digits').addEventListener('wheel',e=>{e.preventDefault(); last=t; t.add(e.deltaY<0?60000:-60000)},{passive:false});
+    t.render(); return t;});
+  last=timers[0];
+  document.addEventListener('keydown',e=>{ if(!last||e.target.closest('input,textarea')) return;
+    if(e.code==='Space'){e.preventDefault(); last.toggle()} else if(e.key==='r'||e.key==='R') last.reset();
+    else if(e.key==='+'||e.key==='=') last.add(60000); else if(e.key==='-') last.add(-60000);});
+  (function loop(){timers.forEach(t=>t.running&&t.render()); requestAnimationFrame(loop)})();
+})();
+</script>

@@ -1,0 +1,106 @@
+/* Concept A "Mica": grote cijfers in het midden, tijden in één klik, bediening eronder,
+   dunne voortgangslijn onderin. Licht en donker volgen Windows. */
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --ink: #121620;
+  --muted: #6a7282;
+  --line: #e2e5eb;
+  --track: #e7eaf0;
+  --accent: #2563eb;
+  --accent-ink: #ffffff;
+  --warn: #d97706;
+  --over: #dc2626;
+  --font: "Segoe UI Variable Display", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1b1f27;
+    --surface: #232833;
+    --ink: #eef1f6;
+    --muted: #98a0b0;
+    --line: #2f3542;
+    --track: #2c323e;
+    --accent: #5b8cff;
+    --accent-ink: #0b1020;
+    --warn: #f0a43a;
+    --over: #f26464;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 14px/1.4 var(--font); overflow: hidden; user-select: none; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.app { position: relative; height: 100%; display: flex; flex-direction: column; }
+
+/* Werkbalk rechtsboven */
+.toolbar { position: absolute; top: 10px; right: 10px; display: flex; gap: 2px; z-index: 2; transition: opacity .3s; }
+.icon { width: 32px; height: 32px; display: grid; place-items: center; border: 0; background: transparent; color: var(--muted); border-radius: 6px; cursor: pointer; }
+.icon:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); color: var(--ink); }
+.icon[aria-pressed="true"] { color: var(--accent); }
+
+/* Midden */
+.stage { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(10px, 3.2vh, 28px); padding: 24px; }
+
+.digits {
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: min(24vw, 34vh);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  background: none;
+  border: 0;
+  padding: 0 .08em;
+  border-radius: 12px;
+  cursor: text;
+  transition: color .3s;
+}
+.digits:hover { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+.digits.edit { width: 5.2ch; text-align: center; outline: none; background: var(--surface); box-shadow: 0 0 0 2px var(--accent); user-select: text; }
+.app[data-phase="warning"] .digits { color: var(--warn); }
+.app[data-phase="overtime"] .digits { color: var(--over); }
+
+.status { margin: calc(-1 * clamp(4px, 1.6vh, 14px)) 0 0; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; min-height: 1.4em; }
+
+.presets { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.chip { min-width: 36px; height: 30px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: transparent; font-size: 13px; font-weight: 500; cursor: pointer; font-variant-numeric: tabular-nums; }
+.chip:hover { border-color: color-mix(in srgb, var(--ink) 25%, var(--line)); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+.controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.btn { height: 34px; padding: 0 16px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); font-size: 13px; font-weight: 500; cursor: pointer; transition: background .15s, border-color .15s; }
+.btn:hover { border-color: color-mix(in srgb, var(--ink) 22%, var(--line)); }
+.btn:active { transform: translateY(1px); }
+.btn.primary { min-width: 104px; background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { background: color-mix(in srgb, var(--accent) 88%, #000); }
+
+/* Voortgang */
+.progress { height: 3px; background: var(--track); flex: none; }
+.progress i { display: block; height: 100%; background: var(--accent); transition: width .1s linear, background .3s; }
+.app[data-phase="warning"] .progress i { background: var(--warn); }
+.app[data-phase="overtime"] .progress i { background: var(--over); }
+
+/* Fullscreen: alleen de tijd telt */
+.app[data-fullscreen="true"] .digits { font-size: min(28vw, 60vh); }
+.app[data-fullscreen="true"] .progress { height: 6px; }
+.app[data-fullscreen="true"] .presets,
+.app[data-fullscreen="true"] .controls,
+.app[data-fullscreen="true"] .toolbar,
+.app[data-fullscreen="true"] .status { transition: opacity .4s; }
+.app[data-idle="true"] .presets,
+.app[data-idle="true"] .controls,
+.app[data-idle="true"] .toolbar { opacity: 0; pointer-events: none; }
+.app[data-idle="true"] { cursor: none; }
+
+/* Klein venster: compacter */
+@media (max-height: 290px) { .presets { display: none; } }
+@media (max-height: 210px) { .controls, .status { display: none; } .digits { font-size: min(26vw, 70vh); } }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

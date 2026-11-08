@@ -1,5 +1,7 @@
 # Werkplan Timer App (werktitel: Tijdvak)
 
+> **Update:** focus eerst op een strakke, professionele basistimer (concept A "Mica", zie `design/concepten.html`). Versie 0.1 staat in de code. Programma-, groepjes- en presentatorstand komen later.
+
 Een eigen timer voor Windows. Voor lessen, werkvormen, vergaderingen en workshops.
 Openen, tijd kiezen, starten. Klein venster, mini-widget of volledig scherm.
 Kern van het product: **customization**. Jouw stijl, jouw functies.
