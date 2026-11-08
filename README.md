@@ -4,6 +4,9 @@ Een eigen timer-app voor Windows: voor lessen, werkvormen, vergaderingen en work
 Strak, modern, professioneel. Gebouwd met Tauri 2 + React + TypeScript.
 
 ## Versie 0.1 (basistimer, concept A "Mica")
+
+<img src="docs/screenshots/licht.png" width="380" alt="Tijdvak licht"> <img src="docs/screenshots/donker.png" width="380" alt="Tijdvak donker">
+
 - Grote cijfers, klik erop om een tijd te typen (`7`, `7:30`, `90s`, `1:05:00`)
 - Snelle tijden: 1, 3, 5, 10, 15, 20, 30 minuten
 - Start / Pauze / Verder, Reset, -1 en +1 minuut (ook scrollen op de cijfers)
