@@ -1,0 +1,547 @@
+<title>Tijdvak Ontwerpbord</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=Instrument+Sans:wght@400;500;600&family=Bebas+Neue&family=Fraunces:opsz,wght@9..144,400;9..144,700&family=Caveat:wght@500;700&family=JetBrains+Mono:wght@400;700&family=Archivo+Black&family=Orbitron:wght@500;800&display=swap">
+<style>
+/* Layout: ontwerpbord. Kop met kernpunten, dan logo-raster, dan 15 "bureaublad"-tegels met elk een Windows-venster, dan standen en functies. */
+:root{
+  --bg:#eef0f4; --surface:#ffffff; --ink:#151a24; --muted:#5b6475; --line:#d6dbe4; --accent:#2f6bd8; --accent-ink:#ffffff;
+  --display:"Familjen Grotesk", "Segoe UI", system-ui, sans-serif;
+  --body:"Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#11141b;--surface:#1a1f29;--ink:#e8ebf2;--muted:#9aa3b5;--line:#2c3342;--accent:#6f9cff;--accent-ink:#0b1020;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#11141b;--surface:#1a1f29;--ink:#e8ebf2;--muted:#9aa3b5;--line:#2c3342;--accent:#6f9cff;--accent-ink:#0b1020;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 64px}
+.wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:clamp(34px,5vw,56px);letter-spacing:-.02em}
+h2{font-size:28px;letter-spacing:-.01em}
+h3{font-size:18px}
+p{margin:0}
+.eyebrow{font:600 12px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.lead{max-width:68ch;color:var(--muted);font-size:17px}
+header{display:grid;gap:18px}
+.facts{display:flex;flex-wrap:wrap;gap:10px}
+.fact{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-size:13px;color:var(--muted)}
+.fact b{color:var(--ink);font-weight:600}
+section{display:grid;gap:22px}
+.sechead{display:grid;gap:8px}
+.sechead p{color:var(--muted);max-width:70ch}
+
+/* Logos */
+.logos{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.logo{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:12px}
+.logo .mark{display:flex;align-items:center;gap:14px}
+.logo .mark svg{width:72px;height:72px;flex:none}
+.logo .word{font:700 26px/1 var(--display);letter-spacing:-.02em}
+.logo .meta{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.logo .meta span{font-size:13px;color:var(--muted)}
+.logo .tiny{display:flex;gap:6px;align-items:center}
+.logo .tiny svg{width:24px;height:24px}
+.logo .tiny svg+svg{width:16px;height:16px}
+.num{font:500 12px var(--mono);color:var(--muted)}
+
+/* Ontwerpen */
+.designs{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:20px}
+@media (max-width:420px){.designs{grid-template-columns:1fr}}
+.card{display:grid;gap:12px;min-width:0}
+.card .cap{display:grid;gap:4px}
+.card .cap .row{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.card .cap p{color:var(--muted);font-size:14px}
+.pill{font:600 11px/1 var(--body);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:6px;background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+.scene{position:relative;container-type:inline-size;aspect-ratio:16/10;max-width:100%;border-radius:12px;overflow:hidden;display:grid;place-items:center;padding:6%;
+  background:radial-gradient(120% 90% at 20% 10%,#7aa2e8 0%,#3d5fa8 45%,#1d2f5c 100%)}
+.scene.warm{background:radial-gradient(120% 90% at 80% 10%,#f0c58a 0%,#c77b45 50%,#5c2f1d 100%)}
+.scene.green{background:radial-gradient(120% 90% at 30% 0%,#9fd3b6 0%,#3f8a6b 50%,#173d33 100%)}
+.scene.grey{background:linear-gradient(160deg,#c9ced8,#8e96a6)}
+.scene.full{padding:0}
+
+/* Windows 11 venster */
+.win{width:100%;height:100%;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 18px 40px rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.12)}
+.tb{height:26px;flex:none;display:flex;align-items:center;justify-content:space-between;padding-left:10px;font:500 11px var(--body)}
+.tb .ttl{display:flex;align-items:center;gap:6px;opacity:.85}
+.tb .ttl svg{width:12px;height:12px}
+.ctl{display:flex;height:100%}
+.ctl i{width:34px;height:100%;position:relative;display:block}
+.ctl i::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.ctl .mn::before{width:9px;height:1px;background:currentColor}
+.ctl .mx::before{width:8px;height:8px;border:1px solid currentColor;border-radius:2px}
+.ctl .cl::before,.ctl .cl::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:1px;background:currentColor}
+.ctl .cl::before{transform:translate(-50%,-50%) rotate(45deg)}
+.ctl .cl::after{transform:translate(-50%,-50%) rotate(-45deg)}
+.wb{flex:1;min-height:0;display:flex;flex-direction:column;position:relative}
+.tabular{font-variant-numeric:tabular-nums}
+
+/* 1 Mica */
+.d-mica{background:#f3f5f9;color:#1b2130}
+.d-mica .wb{padding:4% 6%;gap:6%;justify-content:center}
+.d-mica .t{font:600 15cqw/1 var(--body);letter-spacing:-.03em;text-align:center}
+.d-mica .chips{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.d-mica .chips span{font-size:11px;padding:4px 10px;border-radius:999px;background:#fff;border:1px solid #dfe3ec}
+.d-mica .chips .on{background:#2f6bd8;color:#fff;border-color:#2f6bd8}
+.d-mica .btns{display:flex;gap:8px;justify-content:center}
+.d-mica .btns span{font-size:12px;padding:7px 18px;border-radius:6px;background:#fff;border:1px solid #dfe3ec}
+.d-mica .btns .p{background:#2f6bd8;color:#fff;border-color:#2f6bd8}
+
+/* 2 Ring */
+.d-ring{background:#16181d;color:#f1f2f5}
+.d-ring .wb{display:grid;grid-template-columns:1fr auto;align-items:center;padding:4% 7%;gap:6%}
+.d-ring .ringbox{position:relative;width:100%;max-width:200px;aspect-ratio:1;justify-self:center}
+.d-ring .ringbox svg{width:100%;height:100%}
+.d-ring .ringbox b{position:absolute;inset:0;display:grid;place-items:center;font:500 clamp(24px,4vw,38px) var(--mono)}
+.d-ring .side{display:grid;gap:8px;font-size:11px;color:#9aa0ad}
+.d-ring .side span{display:flex;align-items:center;gap:6px}
+.d-ring .side i{width:8px;height:8px;border-radius:50%;display:block}
+
+/* 3 Krijtbord */
+.d-chalk{background:#2b4a3c;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:6px 6px;color:#f4f1e6;font-family:"Caveat",cursive;border:10px solid #8a5a33;border-radius:6px;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4%;padding:5%;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.d-chalk .t{font-size:20cqw;line-height:.9;font-weight:700}
+.d-chalk .task{font-size:5.2cqw;text-align:center;line-height:1.15}
+.d-chalk .icons{display:flex;gap:14px;font-family:var(--body);font-size:11px;opacity:.85}
+.d-chalk .icons span{border:1.5px dashed rgba(244,241,230,.6);border-radius:6px;padding:3px 8px}
+
+/* 4 Taartpunt */
+.d-pie{background:#fbfbf8;width:100%;height:100%;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:6%;padding:6% 8%;color:#222}
+.d-pie svg{width:min(100%,220px);height:auto}
+.d-pie .txt{display:grid;gap:8px}
+.d-pie .txt b{font:700 clamp(18px,2.6vw,26px)/1.1 var(--display)}
+.d-pie .txt span{font-size:12px;color:#666}
+
+/* 5 Zandloper */
+.d-sand{background:#f6ead6;color:#4a2f1c}
+.d-sand .wb{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8%;padding:5% 9%}
+.d-sand svg{height:min(100%,170px);width:auto}
+.d-sand .t{font:700 clamp(36px,6vw,60px)/1 "Fraunces",serif}
+.d-sand .sub{font-size:12px;opacity:.75;margin-top:6px}
+
+/* 6 Splitflap */
+.d-flap{background:#0c0c0c;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6%}
+.d-flap .tiles{display:flex;gap:2%;align-items:center;width:84%;justify-content:center}
+.d-flap .tile{position:relative;flex:1;max-width:110px;aspect-ratio:3/4;background:linear-gradient(#262626 50%,#1d1d1d 50%);border-radius:8px;display:grid;place-items:center;font:16cqw/1 "Bebas Neue",sans-serif;color:#ffd23f}
+.d-flap .tile::after{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:#0c0c0c}
+.d-flap .colon{font:clamp(40px,7vw,80px)/1 "Bebas Neue";color:#ffd23f}
+.d-flap .lbl{font:500 11px var(--mono);color:#777;letter-spacing:.2em}
+
+/* 7 Stoplicht mini */
+.d-light{width:30%;min-width:110px;height:92%;border-radius:22px;background:#1f2128;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;padding:6% 0;box-shadow:0 18px 40px rgba(0,0,0,.4)}
+.d-light i{width:44%;aspect-ratio:1;border-radius:50%;display:block}
+.d-light .r{background:#4a2326}.d-light .o{background:#ffae2b;box-shadow:0 0 22px #ffae2b}.d-light .g{background:#1f3d2b}
+.d-light b{font:700 18px var(--mono);color:#fff}
+.d-light small{font-size:10px;color:#8a8f9c}
+
+/* 8 Reus / overtijd */
+.d-giant{background:#e2332b;color:#fff;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-between;padding:4% 5%}
+.d-giant .top{display:flex;justify-content:space-between;font:600 12px var(--body);letter-spacing:.1em;text-transform:uppercase}
+.d-giant .t{font:31cqw/.82 "Archivo Black",sans-serif;letter-spacing:-.05em}
+.d-giant .bar{height:8px;background:rgba(255,255,255,.3)}.d-giant .bar i{display:block;height:100%;width:100%;background:#fff}
+
+/* 9 Neon */
+.d-neon{background:#0b0614;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5%;background-image:linear-gradient(rgba(255,60,200,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,60,200,.08) 1px,transparent 1px);background-size:28px 28px}
+.d-neon .t{font:800 18cqw/1 "Orbitron",sans-serif;color:#ffe9fb;text-shadow:0 0 6px #ff3cc8,0 0 22px #ff3cc8,0 0 48px #b01d8a}
+.d-neon .bar{width:62%;height:6px;border-radius:3px;background:#2a1838;overflow:hidden}
+.d-neon .bar i{display:block;height:100%;width:64%;background:#3cf2ff;box-shadow:0 0 14px #3cf2ff}
+.d-neon small{font:500 11px "Orbitron";color:#3cf2ff;letter-spacing:.3em}
+
+/* 10 Papier */
+.d-paper{background:#fffdf7;color:#22303f}
+.d-paper .wb{padding:6% 8% 6% 13%;justify-content:center;gap:8%;background-image:repeating-linear-gradient(transparent 0 23px,#dbe6f3 23px 24px),linear-gradient(90deg,transparent 9%,#f2b8b8 9%,#f2b8b8 calc(9% + 1px),transparent calc(9% + 1px))}
+.d-paper .t{font:400 clamp(44px,8vw,80px)/1 "Fraunces",serif;letter-spacing:-.02em}
+.d-paper .t em{font-style:italic;color:#c0392b}
+.d-paper .ruler{height:22px;position:relative;border-top:2px solid #22303f;background:repeating-linear-gradient(90deg,#22303f 0 1px,transparent 1px 10%)}
+.d-paper .ruler i{position:absolute;top:-8px;left:58%;width:14px;height:14px;border-radius:50%;background:#c0392b}
+.d-paper .lbl{font-size:12px;font-style:italic;font-family:"Fraunces",serif}
+
+/* 11 Pil mini over dia */
+.slide{position:absolute;inset:6%;background:#fff;border-radius:4px;padding:5% 6%;display:grid;align-content:start;gap:10px;box-shadow:0 10px 30px rgba(0,0,0,.25);color:#1b2130}
+.slide h4{margin:0;font:700 clamp(16px,2.4vw,24px)/1.1 var(--display)}
+.slide .ln{height:8px;border-radius:4px;background:#e6e9f0}
+.slide .ln.s{width:70%}.slide .ln.xs{width:45%}
+.d-pill{position:absolute;right:9%;bottom:12%;display:flex;align-items:center;gap:10px;padding:8px 14px 8px 10px;border-radius:999px;background:rgba(20,24,33,.92);color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.35);font:700 18px var(--mono)}
+.d-pill svg{width:22px;height:22px}
+.d-pill small{font:500 10px var(--body);color:#9aa3b5}
+.pin{position:absolute;right:9%;bottom:calc(12% + 48px);font-size:10px;color:#fff;background:rgba(0,0,0,.45);padding:3px 8px;border-radius:4px}
+
+/* 12 Glas overlay */
+.d-glass{position:absolute;left:8%;bottom:10%;padding:12px 18px;border-radius:14px;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.35);color:#fff;display:grid;gap:4px}
+.d-glass b{font:500 clamp(30px,5vw,48px)/1 var(--body);letter-spacing:-.02em;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.d-glass small{font-size:10px;opacity:.85}
+.slide.dark{background:#1d2a44;color:#fff}
+.slide.dark .ln{background:#33446a}
+
+/* 13 Programma */
+.d-agenda{background:#f7f8fb;color:#1b2130}
+.d-agenda .wb{display:grid;grid-template-columns:1.1fr 1fr;grid-template-rows:1fr auto;gap:4% 5%;padding:3% 5% 4%}
+.d-agenda .now{display:grid;align-content:center;gap:6px}
+.d-agenda .now small{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6b7385}
+.d-agenda .now b{font:600 13cqw/1 var(--body);letter-spacing:-.03em}
+.d-agenda .now span{font-size:13px;font-weight:600;color:#7a3fd1}
+.d-agenda ol{list-style:none;margin:0;padding:0;display:grid;gap:3px;align-content:center;font-size:10px}
+.d-agenda li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:3px 8px;border-radius:6px;background:#fff;border:1px solid #e3e6ee}
+.d-agenda li.done{opacity:.45;text-decoration:line-through}
+.d-agenda li.cur{background:#7a3fd1;color:#fff;border-color:#7a3fd1}
+.d-agenda .timeline{grid-column:1/-1;display:flex;height:8px;border-radius:4px;overflow:hidden;gap:2px}
+.d-agenda .timeline i{display:block;height:100%}
+
+/* 14 Regie */
+.d-regie{background:#1c1f26;color:#e9ecf2}
+.d-regie .wb{display:grid;grid-template-columns:1.3fr 1fr;gap:4%;padding:3% 4%}
+.d-regie .beam{background:#000;border-radius:6px;display:grid;place-items:center;position:relative;aspect-ratio:16/10;align-self:center}
+.d-regie .beam b{font:clamp(34px,6vw,58px)/1 "Bebas Neue";color:#fff;letter-spacing:.02em}
+.d-regie .beam small{position:absolute;top:6px;left:8px;font-size:9px;color:#8b93a3;letter-spacing:.1em;text-transform:uppercase}
+.d-regie .info{display:grid;gap:8px;align-content:center;font-size:11px}
+.d-regie .box{background:#272b35;border-radius:6px;padding:8px 10px;display:grid;gap:3px}
+.d-regie .box small{color:#8b93a3;font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.d-regie .box b{font-size:13px}
+
+/* 15 Groepjes */
+.d-groups{background:#fdfcfa;color:#1b2130}
+.d-groups .wb{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,minmax(0,1fr));gap:6px;padding:3%}
+.d-groups .g{border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;color:#fff}
+.d-groups .g small{font-size:10px;font-weight:600;opacity:.9}
+.d-groups .g b{font:600 6.5cqw/1 var(--mono)}
+.d-groups .g.fin{background:#e7e9ee!important;color:#7d8596}
+
+/* Instellingen extra */
+.d-set{background:#f3f5f9;color:#1b2130}
+.d-set .wb{display:grid;grid-template-columns:auto 1fr 1fr;gap:4%;padding:3% 4%;font-size:11px}
+.d-set nav{display:grid;gap:4px;align-content:start}
+.d-set nav span{padding:5px 10px;border-radius:5px}
+.d-set nav .on{background:#e1e8f7;color:#1f4fae;font-weight:600}
+.d-set .opts{display:grid;gap:9px;align-content:start}
+.d-set .opt{display:grid;gap:4px}
+.d-set .opt small{color:#6b7385}
+.d-set .sw{display:flex;gap:5px}
+.d-set .sw i{width:18px;height:18px;border-radius:50%;display:block;border:2px solid #fff;box-shadow:0 0 0 1px #d4d9e3}
+.d-set .sw i.on{box-shadow:0 0 0 2px #2f6bd8}
+.d-set .fake{height:8px;border-radius:4px;background:#d9dfea;position:relative}
+.d-set .fake i{position:absolute;left:0;top:0;bottom:0;width:62%;background:#2f6bd8;border-radius:4px}
+.d-set .prev{border-radius:8px;background:#2b4a3c;display:grid;place-items:center;color:#f4f1e6;font:700 34px "Caveat";align-self:stretch}
+
+/* Standen + functies */
+.modes{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.mode{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:6px;align-content:start}
+.mode p{color:var(--muted);font-size:14px}
+.mode .key{font:500 11px var(--mono);color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:1px 6px;justify-self:start}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.col{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;display:grid;gap:12px;align-content:start}
+.col ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:14px}
+.col li b{font-weight:600}
+.tag{font:600 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.plan{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.plan table{border-collapse:collapse;width:100%;min-width:620px;font-size:14px}
+.plan th,.plan td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+.plan th{font:600 12px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.plan tr:last-child td{border-bottom:0}
+.arch{font:13px/1.6 var(--mono);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;overflow-x:auto;white-space:pre;margin:0}
+footer{color:var(--muted);font-size:13px}
+</style>
+
+<div class="wrap">
+<header>
+  <span class="eyebrow">Eerste opzet · 8 november 2026</span>
+  <h1>Tijdvak, een eigen timer voor Windows</h1>
+  <p class="lead">Werktitel Tijdvak. Voor lessen, werkvormen, vergaderingen en workshops. Openen, tijd kiezen, starten. In een venster, als mini-widget bovenop alles, of groot op de beamer. Hieronder staan 10 logo-concepten, 15 ontwerpen die elk een andere stand laten zien, de functielijst en het werkplan.</p>
+  <div class="facts">
+    <span class="fact"><b>Platform</b> alleen Windows 10/11</span>
+    <span class="fact"><b>Techniek</b> Tauri 2 + TypeScript + React</span>
+    <span class="fact"><b>Installer</b> doel kleiner dan 15 MB</span>
+    <span class="fact"><b>Offline</b> geen account, geen advertenties</span>
+    <span class="fact"><b>Kern</b> customization</span>
+  </div>
+</header>
+
+<!-- LOGO'S -->
+<section>
+  <div class="sechead">
+    <span class="eyebrow">Merk</span>
+    <h2>10 logo-concepten</h2>
+    <p>Elk concept staat groot, als taakbalk-icoon (24 px) en als systeemvak-icoon (16 px). Een timer-icoon moet vooral klein herkenbaar blijven.</p>
+  </div>
+  <div class="logos" id="logos"></div>
+</section>
+
+<!-- ONTWERPEN -->
+<section>
+  <div class="sechead">
+    <span class="eyebrow">Uiterlijk</span>
+    <h2>15 ontwerpen, elk in een stand</h2>
+    <p>Elk ontwerp wordt een thema dat je kunt kiezen en aanpassen. Het label laat zien welke stand (schermmodus) erbij getoond wordt. Alle thema's werken in alle standen.</p>
+  </div>
+  <div class="designs">
+
+    <!-- 1 -->
+    <article class="card">
+      <div class="scene"><div class="win d-mica">
+        <div class="tb"><span class="ttl"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="22" fill="none" stroke="#c9d3e6" stroke-width="9"/><path d="M32 10A22 22 0 1 1 10 32" fill="none" stroke="#2f6bd8" stroke-width="9" stroke-linecap="round"/></svg>Tijdvak</span><span class="ctl"><i class="mn"></i><i class="mx"></i><i class="cl"></i></span></div>
+        <div class="wb">
+          <div class="t tabular">12:47</div>
+          <div class="chips"><span>1</span><span>3</span><span>5</span><span>10</span><span class="on">15</span><span>20</span><span>30</span><span>+ eigen</span></div>
+          <div class="btns"><span>-1</span><span class="p">Pauze</span><span>Reset</span><span>+1</span></div>
+        </div>
+      </div></div>
+      <div class="cap"><div class="row"><span class="num">01</span><h3>Mica</h3><span class="pill">Venster</span></div><p>Standaard thema. Strak Windows 11-uiterlijk met presets in één klik en -1/+1 tijdens het lopen.</p></div>
+    </article>
+
+    <!-- 2 -->
+    <article class="card">
+      <div class="scene"><div class="win d-ring">
+        <div class="tb"><span class="ttl">Tijdvak · Groepswerk</span><span class="ctl"><i class="mn"></i><i class="mx"></i><i class="cl"></i></span></div>
+        <div class="wb">
+          <div class="ringbox"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="none" stroke="#2a2d35" stroke-width="10"/><circle cx="60" cy="60" r="50" fill="none" stroke="#ff9f1c" stroke-width="10" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="230" transform="rotate(-90 60 60)"/></svg><b class="tabular">1:52</b></div>
+          <div class="side"><span><i style="background:#2ec27e"></i>meer dan 2 min</span><span><i style="background:#ff9f1c"></i>laatste 2 min</span><span><i style="background:#ef4444"></i>laatste 30 sec</span></div>
+        </div>
+      </div></div>
+      <div class="cap"><div class="row"><span class="num">02</span><h3>Ring</h3><span class="pill">Venster</span></div><p>Donker met voortgangsring. De ring wisselt van kleur per fase, zodat je zonder lezen ziet hoe laat het is.</p></div>
+    </article>
+
+    <!-- 3 -->
+    <article class="card">
+      <div class="scene warm full" style="padding:4%"><div class="d-chalk">
+        <div class="t tabular">7:30</div>
+        <div class="task">Lees tekst 3 en beantwoord vraag 1 t/m 4.</div>
+        <div class="icons"><span>in tweetallen</span><span>fluisteren</span></div>
+      </div></div>
+      <div class="cap"><div class="row"><span class="num">03</span><h3>Krijtbord</h3><span class="pill">Fullscreen</span></div><p>Voor de klas. Opdracht en werkvorm staan groot onder de tijd, zodat de instructie zichtbaar blijft. Sterk voor NT2.</p></div>
+    </article>
+
+    <!-- 4 -->
+    <article class="card">
+      <div class="scene grey full"><div class="d-pie">
+        <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="92" fill="#fff" stroke="#222" stroke-width="3"/><path d="M100 100 L100 18 A82 82 0 0 1 171.0 141.0 Z" fill="#e5383b"/><g stroke="#222" stroke-width="2"><line x1="100" y1="8" x2="100" y2="16"/><line x1="192" y1="100" x2="184" y2="100"/><line x1="100" y1="192" x2="100" y2="184"/><line x1="8" y1="100" x2="16" y2="100"/></g><circle cx="100" cy="100" r="6" fill="#222"/></svg>
+        <div class="txt"><b>Nog even...</b><span>Het rode vlak wordt kleiner. Cijfers kunnen uit.</span></div>
+      </div></div>
+      <div class="cap"><div class="row"><span class="num">04</span><h3>Taartpunt</h3><span class="pill">Fullscreen</span></div><p>Visuele timer zonder cijfers. Een veelgevraagde functie voor jonge leerders, beginners in het Nederlands en mensen met "tijdblindheid".</p></div>
+    </article>
+
+    <!-- 5 -->
+    <article class="card">
+      <div class="scene warm"><div class="win d-sand">
+        <div class="tb"><span class="ttl">Tijdvak</span><span class="ctl"><i class="mn"></i><i class="mx"></i><i class="cl"></i></span></div>
+        <div class="wb">
+          <svg viewBox="0 0 80 120"><rect x="8" y="4" width="64" height="8" rx="4" fill="#8a5a33"/><rect x="8" y="108" width="64" height="8" rx="4" fill="#8a5a33"/><path d="M16 12 H64 C64 40 44 50 42 60 C44 70 64 80 64 108 H16 C16 80 36 70 38 60 C36 50 16 40 16 12Z" fill="#fff8ec" stroke="#8a5a33" stroke-width="2.5"/><path d="M26 34 H54 C50 44 43 50 40 56 C37 50 30 44 26 34Z" fill="#e0a458"/><path d="M40 60 L40 106" stroke="#e0a458" stroke-width="1.5"/><path d="M20 106 C24 90 34 84 40 82 C46 84 56 90 60 106Z" fill="#e0a458"/></svg>
+          <div><div class="t tabular">04:10</div><div class="sub">van 10:00 · Woordenschat oefenen</div></div>
+        </div>
+      </div></div>
+      <div class="cap"><div class="row"><span class="num">05</span><h3>Zandloper</h3><span class="pill">Venster</span></div><p>Warm en rustig. Het zand zakt mee met de tijd. Goed voor stille werkmomenten.</p></div>
+    </article>
+
+    <!-- 6 -->
+    <article class="card">
+      <div class="scene full"><div class="d-flap">
+        <div class="tiles"><span class="tile">0</span><span class="tile">9</span><span class="colon">:</span><span class="tile">5</span><span class="tile">8</span></div>
+        <span class="lbl">PAUZE TOT 10:45</span>
+      </div></div>
+      <div class="cap"><div class="row"><span class="num">06</span><h3>Splitflap</h3><span class="pill">Fullscreen</span></div><p>Klapcijfers zoals op een oud stationsbord, met animatie bij elke seconde. Goed leesbaar van achter in de zaal.</p></div>
+    </article>
+
+    <!-- 7 -->
+    <article class="card">
+      <div class="scene green"><div class="d-light">
+        <i class="r"></i><i class="o"></i><i class="g"></i>
+        <b class="tabular">1:24</b><small>bijna klaar</small>
+      </div></div>
+      <div class="cap"><div class="row"><span class="num">07</span><h3>Stoplicht</h3><span class="pill">Mini</span></div><p>Smal widget aan de rand van het scherm. Groen, oranje, rood. Je kiest zelf wanneer elke kleur begint.</p></div>
+    </article>
+
+    <!-- 8 -->
+    <article class="card">
+      <div class="scene full"><div class="d-giant">
+        <div class="top"><span>Overtijd</span><span>Spreker 2 · Marketing</span></div>
+        <div class="t tabular">+0:45</div>
+        <div class="bar"><i></i></div>
+      </div></div>
+      <div class="cap"><div class="row"><span class="num">08</span><h3>Reus</h3><span class="pill">Klaar / overtijd</span></div><p>Gigantische cijfers die het hele scherm vullen. Na nul telt hij door in het rood. Handig bij vergaderingen en pitches.</p></div>
+    </article>
+
+    <!-- 9 -->
+    <article class="card">
+      <div class="scene full"><div class="d-neon">
+        <div class="t tabular">03:21</div>
+        <div class="bar"><i></i></div>
+        <small>QUIZ RONDE 2</small>
+      </div></div>
+      <div class="cap"><div class="row"><span class="num">09</span><h3>Neon</h3><span class="pill">Fullscreen</span></div><p>Speels thema voor quizrondes en energieke werkvormen. Gloeiende cijfers en een voortgangsbalk.</p></div>
+    </article>
+
+    <!-- 10 -->
+    <article class="card">
+      <div class="scene grey"><div class="win d-paper">
+        <div class="tb" style="background:#fffdf7"><span class="ttl">Tijdvak</span><span class="ctl"><i class="mn"></i><i class="mx"></i><i class="cl"></i></span></div>
+        <div class="wb">
+          <div class="lbl">Schrijfopdracht: een brief aan de gemeente</div>
+          <div class="t tabular">18<em>:</em>05</div>
+          <div class="ruler"><i></i></div>
+        </div>
+      </div></div>
+      <div class="cap"><div class="row"><span class="num">10</span><h3>Papier</h3><span class="pill">Venster</span></div><p>Schriftpapier met een liniaal als voortgang. Rustig en literair, past bij schrijf- en leesopdrachten.</p></div>
+    </article>
+
+    <!-- 11 -->
+    <article class="card">
+      <div class="scene grey full">
+        <div class="slide"><h4>Les 6: De verleden tijd</h4><div class="ln"></div><div class="ln s"></div><div class="ln"></div><div class="ln xs"></div></div>
+        <div class="d-pill"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="22" fill="none" stroke="#3a4152" stroke-width="9"/><path d="M32 10A22 22 0 1 1 13 43" fill="none" stroke="#6f9cff" stroke-width="9" stroke-linecap="round"/></svg><span class="tabular">05:12</span><small>Spatie = pauze</small></div>
+        <span class="pin">altijd bovenop</span>
+      </div>
+      <div class="cap"><div class="row"><span class="num">11</span><h3>Pil</h3><span class="pill">Mini</span></div><p>Klein widget dat bovenop PowerPoint blijft. Sleep het waar je wilt. Bedienen met globale sneltoetsen, ook als de dia actief is.</p></div>
+    </article>
+
+    <!-- 12 -->
+    <article class="card">
+      <div class="scene full">
+        <div class="slide dark"><h4>Workshop: Feedback geven</h4><div class="ln"></div><div class="ln s"></div><div class="ln"></div><div class="ln xs"></div><div class="ln s"></div></div>
+        <div class="d-glass"><b class="tabular">02:00</b><small>Overlay · klik gaat erdoorheen</small></div>
+      </div>
+      <div class="cap"><div class="row"><span class="num">12</span><h3>Glas</h3><span class="pill">Overlay</span></div><p>Doorzichtig venster boven alles, ook boven fullscreen dia's. Muisklikken gaan erdoorheen, dus het zit nooit in de weg.</p></div>
+    </article>
+
+    <!-- 13 -->
+    <article class="card">
+      <div class="scene"><div class="win d-agenda">
+        <div class="tb"><span class="ttl">Tijdvak · Programma: Studiedag</span><span class="ctl"><i class="mn"></i><i class="mx"></i><i class="cl"></i></span></div>
+        <div class="wb">
+          <div class="now"><small>Nu · blok 3 van 5</small><b class="tabular">11:08</b><span>Groepswerk in 4 rondes</span></div>
+          <ol>
+            <li class="done"><span>Welkom</span><span>5</span></li>
+            <li class="done"><span>Uitleg</span><span>10</span></li>
+            <li class="cur"><span>Groepswerk</span><span>15</span></li>
+            <li><span>Bespreken</span><span>10</span></li>
+            <li><span>Afsluiting</span><span>5</span></li>
+          </ol>
+          <div class="timeline"><i style="flex:5;background:#c9b3ee"></i><i style="flex:10;background:#c9b3ee"></i><i style="flex:15;background:#7a3fd1"></i><i style="flex:10;background:#e3e6ee"></i><i style="flex:5;background:#e3e6ee"></i></div>
+        </div>
+      </div></div>
+      <div class="cap"><div class="row"><span class="num">13</span><h3>Programma</h3><span class="pill">Programma</span></div><p>Een rij blokken die vanzelf doorloopt. Zet je les, workshop of vergaderagenda één keer klaar en hergebruik hem.</p></div>
+    </article>
+
+    <!-- 14 -->
+    <article class="card">
+      <div class="scene"><div class="win d-regie">
+        <div class="tb"><span class="ttl">Tijdvak · Presentator (scherm 1)</span><span class="ctl"><i class="mn"></i><i class="mx"></i><i class="cl"></i></span></div>
+        <div class="wb">
+          <div class="beam"><small>Beamer (scherm 2)</small><b class="tabular">08:42</b></div>
+          <div class="info">
+            <div class="box"><small>Volgende</small><b>Vragenronde · 10 min</b></div>
+            <div class="box"><small>Notitie</small><span>Vergeet hand-outs niet uit te delen</span></div>
+                      </div>
+        </div>
+      </div></div>
+      <div class="cap"><div class="row"><span class="num">14</span><h3>Regie</h3><span class="pill">Presentator</span></div><p>Twee schermen. Het publiek ziet alleen de grote timer, jij ziet ook het volgende blok en je notities.</p></div>
+    </article>
+
+    <!-- 15 -->
+    <article class="card">
+      <div class="scene green"><div class="win d-groups">
+        <div class="tb"><span class="ttl">Tijdvak · Groepjes</span><span class="ctl"><i class="mn"></i><i class="mx"></i><i class="cl"></i></span></div>
+        <div class="wb">
+          <div class="g" style="background:#e4572e"><small>Groep 1</small><b class="tabular">4:12</b></div>
+          <div class="g" style="background:#2d9cdb"><small>Groep 2</small><b class="tabular">3:58</b></div>
+          <div class="g fin"><small>Groep 3 · klaar</small><b>0:00</b></div>
+          <div class="g" style="background:#27ae60"><small>Groep 4</small><b class="tabular">5:30</b></div>
+          <div class="g" style="background:#9b51e0"><small>Groep 5</small><b class="tabular">2:47</b></div>
+          <div class="g" style="background:#f2994a"><small>Groep 6</small><b class="tabular">4:05</b></div>
+        </div>
+      </div></div>
+      <div class="cap"><div class="row"><span class="num">15</span><h3>Groepjes</h3><span class="pill">Groepjes</span></div><p>Meerdere timers tegelijk, elk met eigen kleur en naam. Voor groepswerk, debat of spreekbeurten na elkaar.</p></div>
+    </article>
+
+    <!-- extra -->
+    <article class="card">
+      <div class="scene"><div class="win d-set">
+        <div class="tb"><span class="ttl">Tijdvak · Thema-bouwer</span><span class="ctl"><i class="mn"></i><i class="mx"></i><i class="cl"></i></span></div>
+        <div class="wb">
+          <nav><span class="on">Uiterlijk</span><span>Geluid</span><span>Fases</span><span>Sneltoetsen</span><span>Schermen</span></nav>
+          <div class="opts">
+            <div class="opt"><small>Kleur</small><div class="sw"><i class="on" style="background:#2b4a3c"></i><i style="background:#16181d"></i><i style="background:#e2332b"></i><i style="background:#7a3fd1"></i><i style="background:#f6ead6"></i></div></div>
+            <div class="opt"><small>Lettertype</small><b>Krijt (handschrift)</b></div>
+            <div class="opt"><small>Grootte cijfers</small><div class="fake"><i></i></div></div>
+            <div class="opt"><small>Eindgeluid</small><b>Gong, zacht</b></div>
+          </div>
+          <div class="prev tabular">7:30</div>
+        </div>
+      </div></div>
+      <div class="cap"><div class="row"><span class="num">+</span><h3>Thema-bouwer</h3><span class="pill">Instellingen</span></div><p>Hier pas je alles aan: kleur, lettertype, grootte, achtergrond, geluid en fase-kleuren. Thema's opslaan en delen met collega's.</p></div>
+    </article>
+
+  </div>
+</section>
+
+<!-- STANDEN -->
+<section>
+  <div class="sechead"><span class="eyebrow">Schermmodi</span><h2>De standen</h2><p>Wisselen kan altijd met een sneltoets. De timer loopt gewoon door als je van stand wisselt.</p></div>
+  <div class="modes">
+    <div class="mode"><span class="key">Ctrl+1</span><h3>Venster</h3><p>Normaal programma met presets en bediening. Hier zet je alles klaar.</p></div>
+    <div class="mode"><span class="key">M</span><h3>Mini</h3><p>Klein, altijd bovenop, vrij verplaatsbaar en schaalbaar.</p></div>
+    <div class="mode"><span class="key">O</span><h3>Overlay</h3><p>Doorzichtig en klik-door, boven fullscreen programma's.</p></div>
+    <div class="mode"><span class="key">F</span><h3>Fullscreen</h3><p>Groot op het gekozen scherm (beamer). Bediening verdwijnt na 2 seconden.</p></div>
+    <div class="mode"><span class="key">P</span><h3>Programma</h3><p>Agenda met blokken die vanzelf doorlopen.</p></div>
+    <div class="mode"><span class="key">G</span><h3>Groepjes</h3><p>Meerdere timers naast elkaar.</p></div>
+    <div class="mode"><span class="key">Ctrl+P</span><h3>Presentator</h3><p>Jouw scherm toont meer dan de beamer.</p></div>
+    <div class="mode"><span class="key">Ctrl+,</span><h3>Instellingen</h3><p>Thema-bouwer, geluid, fases, sneltoetsen.</p></div>
+    <div class="mode"><span class="key">auto</span><h3>Klaar</h3><p>Eind-actie naar keuze: geluid, knipperen, tekst, volgend blok, of overtijd tellen.</p></div>
+  </div>
+</section>
+
+<!-- FUNCTIES -->
+<section>
+  <div class="sechead"><span class="eyebrow">Functies</span><h2>Wat erin komt</h2><p>Gebaseerd op bestaande timer-apps, wensen op feedbackborden en fora, en wat in klaslokalen en workshops nog ontbreekt.</p></div>
+  <div class="cols">
+    <div class="col"><span class="tag">Standaard · versie 1</span><h3>De basis goed</h3><ul>
+      <li>Aftellen en stopwatch</li><li>Presets 1 t/m 30 min + eigen presets</li><li>Start, pauze, reset, -1 en +1 min</li><li>Eindgeluid kiezen, volume, stil</li><li>Sneltoetsen (Spatie, R, F, M, +, -)</li><li>Venster, mini en fullscreen</li><li>Instellingen worden onthouden</li></ul></div>
+    <div class="col"><span class="tag">Modern · 2026</span><h3>Voelt als nu</h3><ul>
+      <li>Windows 11 Mica-uiterlijk, licht en donker</li><li>Altijd bovenop, transparant, klik-door</li><li>Fase-kleuren (groen, oranje, rood)</li><li>Globale sneltoetsen boven PowerPoint</li><li>Kies het scherm voor fullscreen</li><li>Voortgang in de taakbalk + melding</li><li>Drift-vrij: altijd op de seconde exact</li></ul></div>
+    <div class="col"><span class="tag">Onderscheidend</span><h3>Wat anderen missen</h3><ul>
+      <li><b>Programma-stand</b> met blokken die doorlopen</li><li><b>Groepjes-stand</b> met meerdere timers</li><li><b>Presentator-stand</b> voor twee schermen</li><li><b>Opdracht-tekst</b> groot onder de timer</li><li><b>Werkvorm-iconen</b>: stil, fluisteren, tweetallen</li><li><b>Visuele timers</b> zonder cijfers</li><li><b>Thema-bouwer</b> + thema's delen</li><li><b>Overtijd</b> in het rood</li><li>Later: geluidsniveau-meter (microfoon)</li></ul></div>
+  </div>
+</section>
+
+<!-- WERKPLAN -->
+<section>
+  <div class="sechead"><span class="eyebrow">Werkplan</span><h2>Aanpak en planning</h2><p>Analyse met de Software Framework skill: nieuwe app, 1 ontwikkelaar, offline, Windows-only. Keuze: modular monolith met een losse, testbare timer-kern (hexagonal light) en automatische builds via GitHub Actions. Geen microservices, geen zware DDD: dat is overkill in deze fase.</p></div>
+<pre class="arch">src/
+  core/       timer-motor (drift-vrij), programma's, groepjes   pure TypeScript + tests
+  themes/     thema-model, standaard thema's, import/export
+  ui/         venster, mini, overlay, fullscreen, presentator
+  settings/   opslag van voorkeuren en presets
+  platform/   Tauri: vensters, sneltoetsen, schermen, geluid
+src-tauri/    Rust: vensterbeheer, globale sneltoetsen, systeemvak
+
+Regel: core kent geen ui en geen platform.</pre>
+  <div class="plan"><table>
+    <thead><tr><th>Fase</th><th>Inhoud</th><th>Resultaat</th></tr></thead>
+    <tbody>
+      <tr><td>0 · Fundament</td><td>Repo, Tauri 2 project, CI-build van de installer, tests</td><td>Lege app installeert op Windows</td></tr>
+      <tr><td>1 · Kern</td><td>Timer-motor met tests, venster, presets, sneltoetsen, geluid</td><td>Bruikbare timer</td></tr>
+      <tr><td>2 · Standen</td><td>Fullscreen, mini, overlay, meerdere schermen</td><td>Inzetbaar in de les</td></tr>
+      <tr><td>3 · Customization</td><td>Thema-bouwer, gekozen standaard thema's, visuele timers, export</td><td>Jouw eigen stijl</td></tr>
+      <tr><td>4 · Onderscheidend</td><td>Programma, groepjes, opdracht-tekst, werkvorm-iconen</td><td>Klaar voor workshops</td></tr>
+      <tr><td>5 · Afwerking</td><td>Presentator-stand, installer, automatische updates, logo</td><td>Versie 1.0</td></tr>
+    </tbody>
+  </table></div>
+  <div class="facts"><span class="fact"><b>Doel 1</b> lopende timer binnen 2 klikken</span><span class="fact"><b>Doel 2</b> minder dan 0,1 s afwijking na 1 uur</span><span class="fact"><b>Doel 3</b> installer kleiner dan 15 MB</span></div>
+</section>
+
+<footer>Ontwerpbord Tijdvak · staat ook in de repository timerapp onder design/ en docs/WERKPLAN.md</footer>
+</div>
+
+<script>
+const L=[
+ ["Boog","Voortgangsring met open eind",'<circle cx="32" cy="32" r="22" fill="none" stroke="#d6dcea" stroke-width="9"/><path d="M32 10A22 22 0 1 1 10 32" fill="none" stroke="#2f6bd8" stroke-width="9" stroke-linecap="round"/>'],
+ ["Zandloper","Klassiek, geometrisch",'<rect x="12" y="6" width="40" height="6" rx="3" fill="#8a5a33"/><rect x="12" y="52" width="40" height="6" rx="3" fill="#8a5a33"/><path d="M17 12H47L32 32Z" fill="#f2d3a2"/><path d="M32 32L47 52H17Z" fill="#e0a458"/><path d="M24 22H40L32 32Z" fill="#e0a458"/>'],
+ ["T-wijzer","De T is een klokwijzer",'<circle cx="32" cy="32" r="28" fill="#151a24"/><rect x="17" y="18" width="30" height="7" rx="3.5" fill="#fff"/><rect x="28.5" y="18" width="7" height="28" rx="3.5" fill="#fff"/><circle cx="32" cy="32" r="3" fill="#ff9f1c"/>'],
+ ["Taartpunt","Het verdwijnende vlak",'<circle cx="32" cy="32" r="26" fill="#fff" stroke="#222" stroke-width="3"/><path d="M32 32L32 9A23 23 0 0 1 51.9 43.5Z" fill="#e5383b"/><circle cx="32" cy="32" r="3" fill="#222"/>'],
+ ["Stopwatch","Herkenbaar op elk formaat",'<rect x="27" y="5" width="10" height="7" rx="2" fill="#2d9c6f"/><rect x="45" y="13" width="7" height="5" rx="2" transform="rotate(45 48.5 15.5)" fill="#2d9c6f"/><circle cx="32" cy="36" r="21" fill="none" stroke="#2d9c6f" stroke-width="6"/><path d="M32 36L32 23" stroke="#151a24" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="36" r="4" fill="#151a24"/>'],
+ ["Stippen","Twaalf minuten-stippen",'<rect x="4" y="4" width="56" height="56" rx="16" fill="#7a3fd1"/>'+[0,1,2,3,4,5,6,7,8,9,10,11].map(k=>{const a=k*Math.PI/6;return `<circle cx="${(32+17*Math.sin(a)).toFixed(1)}" cy="${(32-17*Math.cos(a)).toFixed(1)}" r="3.6" fill="#fff" opacity="${k<9?1:.3}"/>`}).join('')],
+ ["Vak","Het vak uit Tijdvak",'<rect x="8" y="8" width="48" height="48" rx="10" fill="none" stroke="#151a24" stroke-width="6"/><path d="M32 32L32 16A16 16 0 0 1 48 32Z" fill="#e4572e"/>'],
+ ["i-punt","Woordmerk: de punt is een timer",'<rect x="25" y="28" width="14" height="30" rx="7" fill="#151a24"/><circle cx="32" cy="14" r="10" fill="#cfe1ff"/><path d="M32 14L32 4A10 10 0 0 1 41.5 17.1Z" fill="#2f6bd8"/>'],
+ ["Stoplicht","Groen, oranje, rood",'<rect x="20" y="3" width="24" height="58" rx="12" fill="#1f2128"/><circle cx="32" cy="16" r="6.5" fill="#ef4444"/><circle cx="32" cy="32" r="6.5" fill="#ffae2b"/><circle cx="32" cy="48" r="6.5" fill="#2ec27e"/>'],
+ ["Klapcijfer","Stationsbord-tegel",'<rect x="6" y="6" width="52" height="52" rx="10" fill="#1d1d1d"/><rect x="6" y="6" width="52" height="26" rx="10" fill="#2a2a2a"/><rect x="6" y="22" width="52" height="10" fill="#2a2a2a"/><text x="32" y="47" text-anchor="middle" font-family="Bebas Neue, Impact, sans-serif" font-size="36" fill="#ffd23f">25</text><rect x="6" y="31" width="52" height="2" fill="#0c0c0c"/>']
+];
+const host=document.getElementById('logos');
+L.forEach(([n,d,s],i)=>{
+  const svg=`<svg viewBox="0 0 64 64" aria-hidden="true">${s}</svg>`;
+  host.insertAdjacentHTML('beforeend',`<div class="logo"><div class="mark">${svg}<span class="word">Tijdvak</span></div><div class="meta"><span><span class="num">L${String(i+1).padStart(2,'0')}</span> ${n} · ${d}</span><span class="tiny">${svg}${svg}</span></div></div>`);
+});
+</script>
